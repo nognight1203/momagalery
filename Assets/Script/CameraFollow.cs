@@ -13,7 +13,7 @@ public class CameraFollow : MonoBehaviour
     public bool CameraUpAndDown = false;
 
     public float RotateYspeed = 50;
-    float RotateXspeed;
+    
 
     //public GameObject Camera;
 
@@ -28,7 +28,7 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RotateXspeed = Main.GetComponent<CharacterMovement>().RotateXspeed;
+        
 
         CameraPos();
 
