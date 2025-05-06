@@ -3,6 +3,7 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     public GameObject Main;
+    public Camera MainCamera;
     public float horisontalInput;
     public float verticalInput;
     public bool turnLeftAndRight = false;
@@ -10,7 +11,12 @@ public class CharacterMovement : MonoBehaviour
     public float ForwardSpeed = 1;
     public float RotateXspeed = 100;
 
-
+    RaycastHit hit;
+    Ray ray ;
+    public LayerMask MaskFloor;
+    public LayerMask MaskWall;
+    public bool CanTeleport = false ;
+    public GameObject TeleportMark;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -31,19 +37,75 @@ public class CharacterMovement : MonoBehaviour
         {
             turnLeftAndRight = true;
             LastMouseX = Input.mousePosition.x;
-            
+            //
+            ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, 100f,MaskFloor) == true)
+            {
+                if (Physics.Raycast(ray, 100f, MaskWall) == true)
+                {
+                    CanTeleport = false;
+                }
+                else
+                {
+                    CanTeleport = true;
+                    TeleportMark.transform.position = Main.transform.position;
+
+
+                }
+            }
+            else
+            {
+                CanTeleport = false;
+            }
+            //
         }
+
+
+        if(CanTeleport == true)
+        {
+            ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+            
+                TeleportMark.transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+            
+                TeleportMark.transform.GetComponent<MeshRenderer>().enabled = true;
+        }
+
+
 
         if (Input.GetButtonUp("Fire1"))
         {
             turnLeftAndRight = false;
+
+            if(CanTeleport == true)
+            {
+                TeleportMark.transform.GetComponent<MeshRenderer>().enabled = false;
+                Teleport();
+            }
+
         }
 
         if(turnLeftAndRight == true)
         {
-            RotateMain();
+            if (CanTeleport == false)
+            {
+                RotateMain();
+            }
         }
 
+        //
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = 100f;
+        mousePos = MainCamera.ScreenToWorldPoint(mousePos);
+        Debug.DrawRay(MainCamera.transform.position, mousePos - MainCamera.transform.position, Color.blue);
+        //
+
+        
+
+        if (Physics.Raycast(ray,out hit, 100f))
+        {
+            print(hit.point);
+        }
+        print(Physics.Raycast(ray, out hit, 100f));
 
     }
 
@@ -62,4 +124,12 @@ public class CharacterMovement : MonoBehaviour
 
 
     }
+
+    void Teleport()
+    {
+        Main.transform.position = new Vector3(hit.point.x, Main.transform.position.y, hit.point.z);
+        CanTeleport = false;
+    }
+    
+
 }

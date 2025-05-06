@@ -3,6 +3,8 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
 
+    public CharacterMovement CharacterMovement ;
+
     public GameObject Main;
     public GameObject Camera;
 
@@ -13,6 +15,8 @@ public class CameraFollow : MonoBehaviour
     public bool CameraUpAndDown = false;
 
     public float RotateYspeed = 50;
+
+
     
 
     //public GameObject Camera;
@@ -48,7 +52,10 @@ public class CameraFollow : MonoBehaviour
 
         if (CameraUpAndDown == true)
         {
-            CameraFacing();
+            if (CharacterMovement.CanTeleport == false)
+            {
+                CameraFacing();
+            }
         }
     }
 
@@ -59,7 +66,7 @@ public class CameraFollow : MonoBehaviour
         float RotateYadd = Input.mousePosition.y - LastMouseY;
        
 
-        Camera.transform.Rotate(Vector3.right * Time.deltaTime * -RotateYadd * RotateYspeed);
+        Camera.transform.Rotate(Vector3.right * Time.deltaTime * RotateYadd * RotateYspeed);
         LastMouseY = Input.mousePosition.y;
 
        
