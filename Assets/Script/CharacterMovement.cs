@@ -39,9 +39,9 @@ public class CharacterMovement : MonoBehaviour
             LastMouseX = Input.mousePosition.x;
             //
             ray = MainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, 100f,MaskFloor) == true)
+            if (Physics.Raycast(ray,out hit, 100f,MaskFloor) == true)
             {
-                if (Physics.Raycast(ray, 100f, MaskWall) == true)
+                if (Physics.Raycast(ray,out hit, 100f, MaskWall) == true)
                 {
                     CanTeleport = false;
                 }
@@ -103,9 +103,9 @@ public class CharacterMovement : MonoBehaviour
 
         if (Physics.Raycast(ray,out hit, 100f))
         {
-            print(hit.point);
+           // print(hit.point);
         }
-        print(Physics.Raycast(ray, out hit, 100f));
+        //print(Physics.Raycast(ray, out hit, 100f));
 
     }
 
