@@ -823,6 +823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f6c027214b547558577510ac0d65bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PaintPosToSave: {x: 0, y: 0, z: 0}
   PaintToSet: {fileID: 1181945326}
   MainCamera: {fileID: 702495373}
   HangingWall:
@@ -840,6 +841,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 374491d0f82684a63a899f253e85582c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allThePaints:
+    PaintPos: []
+    paintDataList:
+    - PaintPosition: {x: 0, y: 0, z: 0}
+      PanintID: 0
+    - PaintPosition: {x: 0, y: 0, z: 0}
+      PanintID: 0
+  setPaintings: {fileID: 746589953}
 --- !u!1 &759227007
 GameObject:
   m_ObjectHideFlags: 0

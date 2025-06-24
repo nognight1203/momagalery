@@ -1,16 +1,44 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SaveData : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+
+    public AllThePaints allThePaints = new AllThePaints();
+
+    public SetPaintings setPaintings;
+
+
+    private void Update()
     {
-        
+        if (Input.GetButtonDown("Fire1"))
+        {
+            
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void PaintSetData()
     {
-        
+        Vector3 pantPosToSave = setPaintings.PaintPosToSave;
+
     }
+    
 }
+
+[System.Serializable]
+public class AllThePaints
+{
+    public Vector3[] PaintPos;
+
+    public List<PaintData> paintDataList = new List<PaintData>();
+
+}
+[System.Serializable]
+public class PaintData
+{
+    public Vector3 PaintPosition;
+    public int PanintID;
+}
+
+

@@ -4,6 +4,8 @@ using UnityEngine;
 public class SetPaintings : MonoBehaviour
 {
 
+    public Vector3 PaintPosToSave;
+
     public GameObject PaintToSet;
     public Camera MainCamera;
 
@@ -51,5 +53,7 @@ public class SetPaintings : MonoBehaviour
     {
         GameObject SettingPaint = Instantiate(PaintToSet);
         SettingPaint.transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+        Vector3 Setpos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+        PaintPosToSave = Setpos;
     }
 }
