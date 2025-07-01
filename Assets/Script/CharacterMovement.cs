@@ -96,7 +96,7 @@ public class CharacterMovement : MonoBehaviour
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = 100f;
         mousePos = MainCamera.ScreenToWorldPoint(mousePos);
-        Debug.DrawRay(MainCamera.transform.position, mousePos - MainCamera.transform.position, Color.blue);
+        Debug.DrawRay(MainCamera.transform.position, (mousePos - MainCamera.transform.position), Color.blue);
         //
 
         
