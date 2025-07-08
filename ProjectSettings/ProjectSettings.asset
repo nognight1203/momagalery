@@ -830,7 +830,24 @@ PlayerSettings:
   webGLWebAssemblyBigInt: 0
   webGLCloseOnQuit: 0
   webWasm2023: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: FG_WEBGLFB
+    EmbeddedLinux: FG_WEBGLFB
+    GameCoreScarlett: FG_WEBGLFB
+    GameCoreXboxOne: FG_WEBGLFB
+    LinuxHeadlessSimulation: FG_WEBGLFB
+    Nintendo Switch: FG_WEBGLFB
+    PS4: FG_WEBGLFB
+    PS5: FG_WEBGLFB
+    QNX: FG_WEBGLFB
+    ReservedCFE: FG_WEBGLFB
+    Standalone: FG_WEBGLFB
+    VisionOS: FG_WEBGLFB
+    WebGL: FG_WEBGLFB
+    Windows Store Apps: FG_WEBGLFB
+    XboxOne: FG_WEBGLFB
+    iPhone: FG_WEBGLFB
+    tvOS: FG_WEBGLFB
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
