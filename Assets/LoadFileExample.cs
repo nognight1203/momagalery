@@ -50,7 +50,7 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser.Examples
 
         private void OpenFileDialogButtonOnClickHandler()
         {
-            WebGLFileBrowser.OpenFilePanelWithFilters(".jpg,.png");
+            WebGLFileBrowser.OpenFilePanelWithFilters(WebGLFileBrowser.GetFilteredFileExtensions("jpg,png"));
            // WebGLFileBrowser.OpenFolderPanelWithFilters(".jpg");
 
             

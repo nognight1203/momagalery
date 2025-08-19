@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FrostweepGames.Plugins.WebGLFileBrowser;
 #if (UNITY_WEBGL || FG_FB_WEBGL) && !UNITY_EDITOR
 using System.Linq;
 #endif
@@ -144,7 +143,7 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser
                 _files.Add(file);
 
                 if (FilesWereOpenedEvent != null)
-                    FilesWereOpenedEvent(new File[] { file });                
+                    FilesWereOpenedEvent(new File[] { file });
             }
 			else
 			{
