@@ -22,13 +22,14 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser.Examples
 
         public GameObject testIamge;
 
+        
 
         private void Start()
         {
             openFileDialogButton.onClick.AddListener(OpenFileDialogButtonOnClickHandler);
           //  saveOpenedFileButton.onClick.AddListener(SaveOpenedFileButtonOnClickHandler);
           //  cleanupButton.onClick.AddListener(CleanupButtonOnClickhandler);
-            filterOfTypesField.onValueChanged.AddListener(FilterOfTypesFieldOnValueChangedHandler);
+          //  filterOfTypesField.onValueChanged.AddListener(FilterOfTypesFieldOnValueChangedHandler);
 
             WebGLFileBrowser.FilesWereOpenedEvent += FileWasOpenedEventHandler;
 

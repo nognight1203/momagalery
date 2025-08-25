@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using TMPro;
+using System.IO;
 
 
 
@@ -22,15 +23,22 @@ public class SupabaseWebGLExample : MonoBehaviour
 
     public TextMeshProUGUI infor;
 
+    public FrostweepGames.Plugins.WebGLFileBrowser.Examples.LoadFileExample loadFileExample;
+
+
     /// <summary>
     /// 上傳圖片
     /// </summary>
     public void UploadImage()
     {
-        
-        
+         
+
+        Texture texture =   loadFileExample.testIamge.transform.GetComponent<Renderer>().material.mainTexture;
+        imageToUpload = texture as Texture2D;
+
+
         Texture2D readable = MakeTextureReadable(imageToUpload);
-        StartCoroutine(UploadCoroutine(readable, "TestIamge.png"));
+        StartCoroutine(UploadCoroutine(readable, imageToUpload.name + ".png"));
     }
 
     /// <summary>
@@ -38,7 +46,7 @@ public class SupabaseWebGLExample : MonoBehaviour
     /// </summary>
     public void DownloadImage()
     {
-        StartCoroutine(DownloadCoroutine("TestIamge.png", texture =>
+        StartCoroutine(DownloadCoroutine(imageToUpload.name + ".png", texture =>
         {
             displayImage.texture = texture;
         }));
@@ -147,6 +155,8 @@ public class SupabaseWebGLExample : MonoBehaviour
 
         return readableTex;
     }
+
+    
 
 
 }
