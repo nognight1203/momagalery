@@ -5,6 +5,9 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using TMPro;
 using System.IO;
+using Newtonsoft.Json;
+
+
 
 
 
@@ -22,6 +25,8 @@ public class SupabaseWebGLExample : MonoBehaviour
     public Texture2D imageToUpload;
 
     public TextMeshProUGUI infor;
+
+    public TextMeshProUGUI bucketListText;
 
     public FrostweepGames.Plugins.WebGLFileBrowser.Examples.LoadFileExample loadFileExample;
 
@@ -103,10 +108,16 @@ public class SupabaseWebGLExample : MonoBehaviour
 
     IEnumerator ListBucketCoroutine()
     {
-        // REST API: 列出 bucket 檔案
-        string url = $"{projectUrl}/storage/v1/object/list/{bucketName}?limit=100";
+        string url = $"{projectUrl}/storage/v1/object/list/{bucketName}";
 
-        UnityWebRequest request = UnityWebRequest.Get(url);
+        // Supabase 需要 POST body
+        string jsonBody = "{\"prefix\":\"\",\"limit\":100,\"offset\":0}";
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonBody);
+
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("apikey", anonKey);
         request.SetRequestHeader("Authorization", $"Bearer {anonKey}");
 
@@ -114,23 +125,29 @@ public class SupabaseWebGLExample : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            string json = request.downloadHandler.text;
-            Debug.Log("✅ Bucket 檔案列表: " + json);
+            Debug.Log("✅ 取得成功: " + request.downloadHandler.text);
 
-            infor.text = request.downloadHandler.text;
-
-            // 解析 JSON 範例（用 Newtonsoft.Json）
-            //Array files = Array.Parse(json);
-            /*foreach (var file in files)
+            try
             {
-                Debug.Log("檔案名稱: " + file["name"]);
-            }*/
+                SupabaseFileInfo[] files = JsonConvert.DeserializeObject<SupabaseFileInfo[]>(request.downloadHandler.text);
+
+                foreach (var file in files)
+                {
+                    Debug.Log($"📂 檔案: {file.name} ({file.size} bytes, 更新時間: {file.updated_at})");
+                    infor.text += $" {file.name} ({file.size} bytes)\n";
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("❌ JSON 解析失敗: " + e.Message);
+            }
         }
         else
         {
-            Debug.LogError($"❌ 列出 Bucket 失敗: {request.responseCode} {request.error}");
+            Debug.LogError("❌ 取得失敗: " + request.error + "\n" + request.downloadHandler.text);
         }
     }
+
 
     Texture2D MakeTextureReadable(Texture2D tex)
     {
@@ -157,6 +174,22 @@ public class SupabaseWebGLExample : MonoBehaviour
     }
 
     
-
-
 }
+
+[System.Serializable]
+public class SupabaseFileInfo
+{
+    public string name { get; set; }
+    public int size { get; set; }
+    public string id { get; set; }
+    public string bucket_id { get; set; }
+    public string created_at { get; set; }
+    public string updated_at { get; set; }
+    public string last_accessed_at { get; set; }
+    public object  metadata { get; set; }
+}
+
+
+
+
+
