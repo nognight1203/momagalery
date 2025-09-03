@@ -30,6 +30,10 @@ public class SupabaseWebGLExample : MonoBehaviour
 
     public FrostweepGames.Plugins.WebGLFileBrowser.Examples.LoadFileExample loadFileExample;
 
+    [Header("UI Settings")]
+    public Transform contentParent;
+    public GameObject imageItemPrefab;
+
 
     /// <summary>
     /// 上傳圖片
@@ -60,6 +64,11 @@ public class SupabaseWebGLExample : MonoBehaviour
     public void DeletImage()
     {
         StartCoroutine(Deletecoroutinne("test02.png"));
+    }
+
+    public void LoadGallery()
+    {
+        StartCoroutine(ListAndShowIamges());
     }
 
     IEnumerator UploadCoroutine(Texture2D texture, string fileName)
@@ -105,6 +114,8 @@ public class SupabaseWebGLExample : MonoBehaviour
             Debug.LogError($"❌ 下載失敗: {request.error}");
         }
     }
+
+    
 
     public void ListBucketFiles()
     {
@@ -153,6 +164,53 @@ public class SupabaseWebGLExample : MonoBehaviour
         }
     }
 
+    IEnumerator ListAndShowIamges()
+    {
+        string url = $"{projectUrl}/storage/v1/object/list/{bucketName}";
+
+        // Supabase 需要 POST body
+        string jsonBody = "{\"prefix\":\"\",\"limit\":100,\"offset\":0}";
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonBody);
+
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("apikey", anonKey);
+        request.SetRequestHeader("Authorization", $"Bearer {anonKey}");
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("✅ 取得成功: " + request.downloadHandler.text);
+
+            try
+            {
+                SupabaseFileInfo[] files = JsonConvert.DeserializeObject<SupabaseFileInfo[]>(request.downloadHandler.text);
+
+                foreach (var file in files)
+                {
+                    Debug.Log($"📂 檔案: {file.name} ({file.size} bytes, 更新時間: {file.updated_at})");
+                    infor.text += $" {file.name} ({file.size} bytes)\n";
+
+                    string fileName = file.name.ToString();
+                    string publicUrl = $"{projectUrl}/storage/v1/object/public/{bucketName}/{fileName}";
+
+                     StartCoroutine(DownloadAndCreateItem(publicUrl));
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("❌ JSON 解析失敗: " + e.Message);
+            }
+        }
+        else
+        {
+            Debug.LogError("❌ 取得失敗: " + request.error + "\n" + request.downloadHandler.text);
+        }
+    }
+
     IEnumerator Deletecoroutinne(string fileName)
     {
         string url = $"{projectUrl}/storage/v1/object/{bucketName}/{fileName}";
@@ -175,6 +233,31 @@ public class SupabaseWebGLExample : MonoBehaviour
             Debug.Log($"{request.responseCode} {request.error} \n{request.downloadHandler.text}");
         }
         
+    }
+
+    IEnumerator DownloadAndCreateItem(string url)
+    {
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Texture2D texture = DownloadHandlerTexture.GetContent(request);
+            Debug.Log("✅ 下載成功");
+
+            GameObject newItem = Instantiate(imageItemPrefab, contentParent);
+            RawImage rawImage = newItem.GetComponentInChildren<RawImage>();
+            rawImage.texture = texture;
+
+            float aspect = (float)texture.width / texture.height;
+            AspectRatioFitter fitter = rawImage.GetComponent<AspectRatioFitter>();
+            fitter.aspectRatio = aspect;
+        }
+        else
+        {
+            Debug.LogError($"圖片下載失敗：{request.error}");
+        }
     }
 
 
