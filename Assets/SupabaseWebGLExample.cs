@@ -57,6 +57,11 @@ public class SupabaseWebGLExample : MonoBehaviour
         }));
     }
 
+    public void DeletImage()
+    {
+        StartCoroutine(Deletecoroutinne("test02.png"));
+    }
+
     IEnumerator UploadCoroutine(Texture2D texture, string fileName)
     {
 
@@ -146,6 +151,30 @@ public class SupabaseWebGLExample : MonoBehaviour
         {
             Debug.LogError("❌ 取得失敗: " + request.error + "\n" + request.downloadHandler.text);
         }
+    }
+
+    IEnumerator Deletecoroutinne(string fileName)
+    {
+        string url = $"{projectUrl}/storage/v1/object/{bucketName}/{fileName}";
+        UnityWebRequest request = UnityWebRequest.Delete(url);
+        request.SetRequestHeader("apikey", anonKey);
+        request.SetRequestHeader("Authorization", $"Bearer {anonKey}");
+
+        yield return request.SendWebRequest();
+
+
+        if (request.result == UnityWebRequest.Result.Success ||
+                                request.responseCode == 200 ||
+                                request.responseCode == 204)
+        {
+            Debug.Log($"已刪除檔案{fileName}");
+
+        }
+        else
+        {
+            Debug.Log($"{request.responseCode} {request.error} \n{request.downloadHandler.text}");
+        }
+        
     }
 
 
