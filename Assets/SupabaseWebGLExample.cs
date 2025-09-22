@@ -31,7 +31,7 @@ public class SupabaseWebGLExample : MonoBehaviour
     public FrostweepGames.Plugins.WebGLFileBrowser.Examples.LoadFileExample loadFileExample;
 
     [Header("UI Settings")]
-    public Transform contentParent;
+    public RectTransform contentParent;
     public GameObject imageItemPrefab;
 
 
@@ -197,7 +197,7 @@ public class SupabaseWebGLExample : MonoBehaviour
                     string fileName = file.name.ToString();
                     string publicUrl = $"{projectUrl}/storage/v1/object/public/{bucketName}/{fileName}";
 
-                     StartCoroutine(DownloadAndCreateItem(publicUrl));
+                     StartCoroutine(DownloadAndCreateItem(publicUrl,fileName));
                 }
             }
             catch (System.Exception e)
@@ -235,7 +235,7 @@ public class SupabaseWebGLExample : MonoBehaviour
         
     }
 
-    IEnumerator DownloadAndCreateItem(string url)
+    IEnumerator DownloadAndCreateItem(string url,string fileName)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
 
@@ -245,14 +245,33 @@ public class SupabaseWebGLExample : MonoBehaviour
         {
             Texture2D texture = DownloadHandlerTexture.GetContent(request);
             Debug.Log("✅ 下載成功");
+            Canvas.ForceUpdateCanvases();
 
             GameObject newItem = Instantiate(imageItemPrefab, contentParent);
             RawImage rawImage = newItem.GetComponentInChildren<RawImage>();
-            rawImage.texture = texture;
+            LayoutElement layout = newItem.GetComponent<LayoutElement>();
 
-            float aspect = (float)texture.width / texture.height;
-            AspectRatioFitter fitter = rawImage.GetComponent<AspectRatioFitter>();
-            fitter.aspectRatio = aspect;
+            rawImage.texture = texture;
+            RectTransform rt = rawImage.rectTransform;
+            rt.anchorMin = new Vector2(0, 0);
+            rt.anchorMax = new Vector2(1, 1);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            GalleryItem item = rawImage.GetComponent<GalleryItem>();
+            if (item != null)
+            {
+                item.Init( fileName); // 或你的檔名
+            }
+
+            float fixedWidth = contentParent.rect.width;
+            float aspect = (float)texture.height / texture.width;
+            float targetHeight = fixedWidth * aspect;
+            //AspectRatioFitter fitter = rawImage.GetComponent<AspectRatioFitter>();
+            //fitter.aspectRatio = aspect;
+            layout.preferredWidth = fixedWidth;
+            layout.preferredHeight = targetHeight;
+            Debug.LogError($"preferredWidth：{aspect} preferredHeight：{texture.height}");
         }
         else
         {
@@ -300,7 +319,6 @@ public class SupabaseFileInfo
     public string last_accessed_at { get; set; }
     public object  metadata { get; set; }
 }
-
 
 
 
