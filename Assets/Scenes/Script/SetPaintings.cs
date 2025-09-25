@@ -18,6 +18,7 @@ public class SetPaintings : MonoBehaviour
     public string imagePath ;
     Sprite sprite;
     Texture2D tex = null;
+    public  Texture2D ChosingTexure;
     byte[] fileData;
 
     public bool TextureSwitch;
@@ -35,8 +36,8 @@ public class SetPaintings : MonoBehaviour
             fileData = File.ReadAllBytes(imagePath);
             tex = new Texture2D(2, 2);
             tex.LoadImage(fileData);
-            print(tex.width);
-            print(tex.height);
+           // print(tex.width);
+           // print(tex.height);
         }
         else
         {
@@ -61,8 +62,8 @@ public class SetPaintings : MonoBehaviour
             fileData = File.ReadAllBytes(imagePath);
             tex = new Texture2D(2, 2);
             tex.LoadImage(fileData);
-            print(tex.width);
-            print(tex.height);
+           // print(tex.width);
+            //print(tex.height);
         }
 
         ray = MainCamera.ScreenPointToRay(Input.mousePosition);
@@ -70,9 +71,10 @@ public class SetPaintings : MonoBehaviour
         //print(PaintToSet.GetComponent<Renderer>().material.mainTexture.width);
         //print(PaintToSet.GetComponent<Renderer>().material.mainTexture.height);
         
-        print((float)((float)tex.width/(float)tex.height));
+        //print((float)((float)tex.width/(float)tex.height));
 
         //HitAngle
+
         if (Physics.Raycast(ray, out hit ,100f,HangingWall)== true)
         {
             //print(hit.normal);
@@ -83,10 +85,10 @@ public class SetPaintings : MonoBehaviour
             PaintToSet.transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
             PaintToSet.transform.GetComponent<MeshRenderer>().enabled = true;
 
-            PaintToSet.transform.localScale = new Vector3(2f* (float)((float)tex.width / (float)tex.height), 2f , 0.25f);
+            PaintToSet.transform.localScale = new Vector3(2f* (float)((float)ChosingTexure.width / (float)ChosingTexure.height), 2f , 0.25f);
                 
             Renderer rend = PaintToSet.GetComponent<Renderer>();
-            rend.material.mainTexture = tex;
+            rend.material.mainTexture = ChosingTexure;
 
             PaintToSet.transform.LookAt(PaintToSet.transform.position + hit.normal);
 

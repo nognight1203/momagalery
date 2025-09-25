@@ -33,7 +33,8 @@ public class SupabaseWebGLExample : MonoBehaviour
     [Header("UI Settings")]
     public RectTransform contentParent;
     public GameObject imageItemPrefab;
-
+    [Header("Manerger Settings")]
+    public GameObject manerger;
 
     /// <summary>
     /// 上傳圖片
@@ -251,6 +252,9 @@ public class SupabaseWebGLExample : MonoBehaviour
             RawImage rawImage = newItem.GetComponentInChildren<RawImage>();
             LayoutElement layout = newItem.GetComponent<LayoutElement>();
 
+            
+            
+
             rawImage.texture = texture;
             RectTransform rt = rawImage.rectTransform;
             rt.anchorMin = new Vector2(0, 0);
@@ -259,9 +263,11 @@ public class SupabaseWebGLExample : MonoBehaviour
             rt.offsetMax = Vector2.zero;
 
             GalleryItem item = rawImage.GetComponent<GalleryItem>();
+
+            item.setPaintings = manerger.GetComponent<SetPaintings>();
             if (item != null)
             {
-                item.Init( fileName); // 或你的檔名
+                item.Init( fileName,texture); // 或你的檔名
             }
 
             float fixedWidth = contentParent.rect.width;
