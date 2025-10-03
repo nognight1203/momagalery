@@ -27,6 +27,8 @@ public class PaintSetPointsSetter : MonoBehaviour
     static Dictionary<string,GameObject> PointsDic = new Dictionary<string, GameObject>();
     public string WallID;
 
+    
+
     void Start()
     {
         /*ConerLeftBottom = Instantiate(PointGizmo, this.transform);
@@ -37,7 +39,7 @@ public class PaintSetPointsSetter : MonoBehaviour
         SetHightAndWight();
         ActivePointsDic(HorizenCount,VerticleCount);
 
-
+       
     }
 
     private void Update()

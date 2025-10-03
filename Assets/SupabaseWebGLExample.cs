@@ -35,6 +35,9 @@ public class SupabaseWebGLExample : MonoBehaviour
     public GameObject imageItemPrefab;
     [Header("Manerger Settings")]
     public GameObject manerger;
+    public PointTrigger pointTrigger;
+
+    public GameObject paintToSet;
 
     /// <summary>
     /// 上傳圖片
@@ -264,10 +267,12 @@ public class SupabaseWebGLExample : MonoBehaviour
 
             GalleryItem item = rawImage.GetComponent<GalleryItem>();
 
+           // item.pointTrigger = pointTrigger;
+
             item.setPaintings = manerger.GetComponent<SetPaintings>();
             if (item != null)
             {
-                item.Init( fileName,texture); // 或你的檔名
+                item.Init( fileName,texture,paintToSet); // 或你的檔名
             }
 
             float fixedWidth = contentParent.rect.width;

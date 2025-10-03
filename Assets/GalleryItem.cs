@@ -10,11 +10,14 @@ public class GalleryItem : MonoBehaviour
     [HideInInspector] public string fileName;
     public SetPaintings setPaintings;
     Texture2D texture2D;
+    GameObject GetObject;
+    
 
-    public void Init( string fileName,Texture2D texture)
+    public void Init( string fileName,Texture2D texture,GameObject gameObject)
     {
         this.fileName = fileName;
         this.texture2D = texture;
+        this.GetObject = gameObject;
 
         // Button 點擊事件
         button.onClick.RemoveAllListeners();
@@ -32,5 +35,10 @@ public class GalleryItem : MonoBehaviour
 
         setPaintings.ChosingTexure = texture2D;
 
+        PointTrigger.testName = fileName;
+
+        PointTrigger.PaintSet = GetObject;
+        PointTrigger.textureForPaint = texture2D;
+        PointTrigger.newPaint.GetComponent<Renderer>().material.mainTexture = texture2D;
     }
 }
