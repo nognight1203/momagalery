@@ -11,6 +11,7 @@ public class GalleryItem : MonoBehaviour
     public SetPaintings setPaintings;
     Texture2D texture2D;
     GameObject GetObject;
+    public RawImage selectedPicture;
     
 
     public void Init( string fileName,Texture2D texture,GameObject gameObject)
@@ -24,6 +25,7 @@ public class GalleryItem : MonoBehaviour
         button.onClick.AddListener(() =>
         {
             OnClickItem();
+            selectedPicture.texture = texture;
         });
     }
 
@@ -39,6 +41,10 @@ public class GalleryItem : MonoBehaviour
 
         PointTrigger.PaintSet = GetObject;
         PointTrigger.textureForPaint = texture2D;
-        PointTrigger.newPaint.GetComponent<Renderer>().material.mainTexture = texture2D;
+        if(PointTrigger.newPaint != null)
+        {
+            PointTrigger.newPaint.GetComponent<Renderer>().material.mainTexture = texture2D;
+        }
+        
     }
 }
