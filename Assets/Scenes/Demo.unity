@@ -1152,6 +1152,7 @@ MonoBehaviour:
   manerger: {fileID: 461648656}
   pointTrigger: {fileID: 1245767315}
   paintToSet: {fileID: 681866316}
+  SelectedPicture: {fileID: 1324734334}
 --- !u!114 &348223331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1543,6 +1544,7 @@ GameObject:
   - component: {fileID: 461648658}
   - component: {fileID: 461648657}
   - component: {fileID: 461648662}
+  - component: {fileID: 461648663}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1671,6 +1673,18 @@ MonoBehaviour:
   Add: {fileID: 1078822355}
   Done: {fileID: 1826378048}
   Cancel: {fileID: 712855232}
+--- !u!114 &461648663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461648656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de43428eb012443c6a927e7b6b92ea71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &572198010
 GameObject:
   m_ObjectHideFlags: 0
@@ -4857,7 +4871,7 @@ GameObject:
   - component: {fileID: 1324734335}
   - component: {fileID: 1324734334}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: SelectedPicture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "291466691511",
+    "project_id": "momogalery-c1358",
+    "storage_bucket": "momogalery-c1358.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:291466691511:android:b67ccddd5045e2f2545e32",
+        "android_client_info": {
+          "package_name": "com.momagalery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0TgRRQ7tN2aSkPyTdgTAKi-wthmF1kVE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
