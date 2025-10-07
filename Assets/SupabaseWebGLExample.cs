@@ -38,7 +38,6 @@ public class SupabaseWebGLExample : MonoBehaviour
     public PointTrigger pointTrigger;
 
     public GameObject paintToSet;
-    public RawImage SelectedPicture;
 
     /// <summary>
     /// 上傳圖片
@@ -267,7 +266,6 @@ public class SupabaseWebGLExample : MonoBehaviour
             rt.offsetMax = Vector2.zero;
 
             GalleryItem item = rawImage.GetComponent<GalleryItem>();
-            item.selectedPicture = SelectedPicture;
 
            // item.pointTrigger = pointTrigger;
 

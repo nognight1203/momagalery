@@ -14,10 +14,10 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
 
     public static string testName;
 
-    public static bool AddMode ;
+    public static bool AddMode;
     public static bool PickingMode = true;
     public static bool MoveMode;
-    public  bool addMode ;
+    public  bool addMode;
     public  bool pickingMode ;
     public  bool moveMode;
 
@@ -38,8 +38,8 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
            // PaintToSet.transform.position = this.transform.position;
 
         }
-        print(AddMode);
-        if(AddMode == true)
+
+        if(PickingMode == true)
         {
             if(newPaint == null)
             {
