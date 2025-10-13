@@ -44,7 +44,15 @@ public class UIControler : MonoBehaviour
     }
     public void AddDone()
     {
+        PointTrigger.PaintDataDic.Add(PointTrigger.SelectedPosID,PointTrigger.newPaint);
         PointTrigger.newPaint = null;
+        PointTrigger.selectedPaint = null;
+        foreach(var value in PointTrigger.PaintDataDic)
+        {
+            string textureName = value.Value.GetComponent<Renderer>().material.mainTexture.name.ToString();
+            print($"ID:{value.Key} ,TexureName:{textureName}");
+        }
+        //print(PointTrigger.PaintDataDic.ToString());
     }
     public void AddCancel()
     {

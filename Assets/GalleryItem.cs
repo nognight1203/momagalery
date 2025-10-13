@@ -19,6 +19,7 @@ public class GalleryItem : MonoBehaviour
         this.fileName = fileName;
         this.texture2D = texture;
         this.GetObject = gameObject;
+        this.texture2D.name = fileName;
 
         // Button 點擊事件
         button.onClick.RemoveAllListeners();

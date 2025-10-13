@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+
 public class PaintSetPointsSetter : MonoBehaviour
 {
     public float PointHight;
@@ -26,6 +29,7 @@ public class PaintSetPointsSetter : MonoBehaviour
 
     static Dictionary<string,GameObject> PointsDic = new Dictionary<string, GameObject>();
     public string WallID;
+
 
     
 
@@ -94,12 +98,29 @@ public class PaintSetPointsSetter : MonoBehaviour
                 gameObject.transform.SetLocalPositionAndRotation(new Vector3(toleranceWeight * i, toleranceHeight * t), new Quaternion(0, 0, 0, 0));
                 //print($"id = {WallID}-{i}-{t}");
                 string pointID = $"{WallID}-{i}-{t}";
-                print(pointID);
+               // print(pointID);
                 PointsDic.Add(pointID,gameObject);
                 gameObject.GetComponent<PointTrigger>().pointID = pointID;
             }
         }
-
+        
+        
     }
+
+}
+
+public class PaintList
+{
+    public PaintDatasFirebase[] PaintDatas;
+}
+
+
+public  class PaintDatasFirebase
+{
+    public  string paintsID ;
+    public  GameObject paintInstence;
+
+    
+
 
 }

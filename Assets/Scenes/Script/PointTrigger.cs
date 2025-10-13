@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class PointTrigger : MonoBehaviour, IPointerClickHandler
 {
     public string pointID;
     public static GameObject selectedPaint;
     public static GameObject newPaint;
+    public static string SelectedPosID;
 
     public static Texture2D textureForPaint;
     public static GameObject PaintSet;
@@ -21,18 +23,20 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
     public  bool pickingMode ;
     public  bool moveMode;
 
+    public static Dictionary<string, GameObject> PaintDataDic = new Dictionary<string, GameObject>();
+
     public void OnPointerClick(PointerEventData eventData)
     {
         print(pointID);
 
-
+        SelectedPosID = pointID;
         //if(AddMode == true)
         {
         /*GameObject SettingPaint = Instantiate(PaintToSet);
         Material newMaterial = new Material(PaintToSet.GetComponent<Renderer>().material);
         SettingPaint.GetComponent<Renderer>().material = newMaterial;*/
 
-        print(testName);
+        //print(testName);
 
             //PaintToSet = testBall;
            // PaintToSet.transform.position = this.transform.position;
@@ -49,6 +53,7 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
                 SettingPaint.GetComponent<Renderer>().material.mainTexture = textureForPaint;
                 SettingPaint.transform.position = this.transform.position;
                 newPaint = SettingPaint;
+                //print(textureForPaint.name);
             }
             else
             {
@@ -57,6 +62,8 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
         }
 
     }
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
