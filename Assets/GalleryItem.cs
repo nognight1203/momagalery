@@ -12,6 +12,7 @@ public class GalleryItem : MonoBehaviour
     Texture2D texture2D;
     GameObject GetObject;
     public RawImage selectedPicture;
+
     
 
     public void Init( string fileName,Texture2D texture,GameObject gameObject)

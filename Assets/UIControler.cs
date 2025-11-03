@@ -56,7 +56,7 @@ public class UIControler : MonoBehaviour
     }
     public void AddCancel()
     {
-
+        Destroy(PointTrigger.newPaint);
     }
 
 

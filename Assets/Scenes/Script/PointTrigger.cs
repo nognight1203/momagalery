@@ -53,6 +53,7 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
                 SettingPaint.GetComponent<Renderer>().material.mainTexture = textureForPaint;
                 SettingPaint.transform.position = this.transform.position;
                 newPaint = SettingPaint;
+                newPaint.transform.localScale = new Vector3(2f * (float)((float)textureForPaint.width / (float)textureForPaint.height), 2f, 0.25f);
                 //print(textureForPaint.name);
             }
             else

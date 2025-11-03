@@ -1153,6 +1153,7 @@ MonoBehaviour:
   pointTrigger: {fileID: 1245767315}
   paintToSet: {fileID: 681866316}
   SelectedPicture: {fileID: 1324734334}
+  PaintTextureContainter: {fileID: 681866316}
 --- !u!114 &348223331
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.IO;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 
 
@@ -39,6 +40,10 @@ public class SupabaseWebGLExample : MonoBehaviour
 
     public GameObject paintToSet;
     public RawImage SelectedPicture;
+
+    [Header("All DownLoad Texture")]
+    Dictionary<string,GameObject> TextureIamge = new Dictionary<string,GameObject>();
+    public GameObject PaintTextureContainter;
 
     /// <summary>
     /// 上傳圖片
@@ -256,8 +261,12 @@ public class SupabaseWebGLExample : MonoBehaviour
             RawImage rawImage = newItem.GetComponentInChildren<RawImage>();
             LayoutElement layout = newItem.GetComponent<LayoutElement>();
 
-            
-            
+            //貼圖存放位置
+            TextureIamge.Add(fileName,Instantiate(PaintTextureContainter));
+            GameObject texureImage = TextureIamge[fileName];
+            texureImage.transform.GetComponent<Renderer>().material.mainTexture = texture;
+             texureImage.transform.GetComponent<Renderer>().material.mainTexture.name = fileName;
+            print(texureImage.transform.GetComponent<Renderer>().material.mainTexture.name);
 
             rawImage.texture = texture;
             RectTransform rt = rawImage.rectTransform;
