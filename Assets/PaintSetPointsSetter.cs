@@ -27,7 +27,7 @@ public class PaintSetPointsSetter : MonoBehaviour
     public bool test = false;
     public string testStr;
 
-    static Dictionary<string,GameObject> PointsDic = new Dictionary<string, GameObject>();
+    public static Dictionary<string,GameObject> PointsDic = new Dictionary<string, GameObject>();
     public string WallID;
 
 
@@ -117,8 +117,10 @@ public class PaintList
 
 public  class PaintDatasFirebase
 {
-    public  string paintsID ;
-    public  GameObject paintInstence;
+    //public  string paintsID ;
+    public string paintsName ;
+    public string paintsScale;
+    //public  GameObject paintInstence;
 
     
 

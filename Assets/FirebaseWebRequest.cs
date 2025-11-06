@@ -1,10 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
+using UnityEngine.UIElements;
+
 
 public class FirebaseWebRequest : MonoBehaviour
 {
     public string dbUrl;
+
+    public GameObject seterPanitPrefab;
 
     /* public void SavePaint(string paintID, string paintName)
      {
@@ -13,18 +19,21 @@ public class FirebaseWebRequest : MonoBehaviour
 
     public string dd;
     public string dd2;
+    public string dd3;
     public void testsend()
     {
-        StartCoroutine(SetValue(dd, dd2));
+        
+        StartCoroutine(SetValue(PointTrigger.SelectedPosID, PointTrigger.newPaint.GetComponent<Renderer>().material.mainTexture.name,PointTrigger.scalePaint));
     }
 
 
 
-    IEnumerator SetValue(string paintID, string paintName)
+    IEnumerator SetValue(string paintID, string paintName,string scale)
     {
         string url = $"{dbUrl}PaintID/{paintID}.json";
-        string json = $"\"{paintName}\""; // 或 $"\"{paintName}\""
-
+        PaintDatasFirebase Data = new PaintDatasFirebase {paintsName = paintName,paintsScale = scale };
+        //string json = $"\"{paintName}\""; // 或 $"\"{paintName}\""
+        string json = JsonUtility.ToJson(Data);
         UnityWebRequest request = UnityWebRequest.Put(url, json);
         request.SetRequestHeader("Content-Type", "application/json");
 
@@ -41,6 +50,95 @@ public class FirebaseWebRequest : MonoBehaviour
         else
         {
             Debug.Log($"✅ Saved paint: {paintName}");
+        }
+    }
+
+
+    public void GetAll()
+    {
+        StartCoroutine(GetAllPaintData());
+    }
+
+    IEnumerator GetAllPaintData()
+    {
+        string url = $"{dbUrl}PaintID.json";
+        UnityWebRequest request = UnityWebRequest.Get(url);
+
+        yield return request.SendWebRequest();
+
+#if UNITY_2020_1_OR_NEWER
+        if (request.result != UnityWebRequest.Result.Success)
+#else
+        if (request.isNetworkError || request.isHttpError)
+#endif
+        {
+            Debug.LogError($"❌ Error: {request.error}");
+            Debug.LogError($"Response: {request.downloadHandler.text}");
+        }
+        else
+        {
+            string json = request.downloadHandler.text;
+            Debug.Log($"📥 Raw JSON: {json}");
+
+            // ✅ 使用 Newtonsoft.Json 解析成 Dictionary
+            var paintDict = JsonConvert.DeserializeObject<Dictionary<string, PaintDatasFirebase>>(json);
+
+            if (paintDict == null)
+            {
+                Debug.LogWarning("⚠️ 沒有資料或格式錯誤");
+                yield break;
+            }
+
+            foreach (var kvp in paintDict)
+            {
+                string id = kvp.Key;
+                PaintDatasFirebase data = kvp.Value;
+
+                GameObject SetPaint = Instantiate(seterPanitPrefab);
+                SetPaint.transform.position = PaintSetPointsSetter.PointsDic[id].transform.position;
+                Texture texture = SupabaseWebGLExample.TextureIamge[data.paintsName].GetComponent<Renderer>().material.mainTexture;
+                SetPaint.GetComponent<Renderer>().material.mainTexture = texture;
+                SetPaint.AddComponent<PaintTrigger>();
+                SetPaint.GetComponent<PaintTrigger>().paintID = id;
+                SetPaint.GetComponent<PaintTrigger>().FirebaseWebRequest = this;
+                
+                SetPaint.transform.localScale = new Vector3(float.Parse(data.paintsScale) * (float)texture.width / (float)texture.height, float.Parse(data.paintsScale), 0.25f);
+
+
+                Debug.Log($"🖼️ ID: {id} | Name: {data.paintsName} | Scale: {data.paintsScale}");
+            }
+        }
+    }
+    enum PaintScale
+    {
+        max = 4,
+        mid = 2,
+        min = 1
+    }
+
+    public void DeletePaint(string paintID)
+    {
+        StartCoroutine(DeleteCoroutine(paintID));
+    }
+
+    IEnumerator DeleteCoroutine(string paintID)
+    {
+        string url = $"{dbUrl}PaintID/{paintID}.json";
+        UnityWebRequest request = UnityWebRequest.Delete(url);
+
+        yield return request.SendWebRequest();
+
+#if UNITY_2020_1_OR_NEWER
+        if (request.result != UnityWebRequest.Result.Success)
+#else
+        if (request.isNetworkError || request.isHttpError)
+#endif
+        {
+            Debug.LogError($"❌ 刪除失敗: {request.error}");
+        }
+        else
+        {
+            Debug.Log($"✅ 成功刪除 {paintID}");
         }
     }
 }

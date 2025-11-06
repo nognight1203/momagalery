@@ -8,6 +8,7 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
     public static GameObject selectedPaint;
     public static GameObject newPaint;
     public static string SelectedPosID;
+    public static string scalePaint;
 
     public static Texture2D textureForPaint;
     public static GameObject PaintSet;
@@ -25,6 +26,10 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
 
     public static Dictionary<string, GameObject> PaintDataDic = new Dictionary<string, GameObject>();
 
+    public static float SeletScale = 2;
+    public static float TextureTolerence;
+
+
     public void OnPointerClick(PointerEventData eventData)
     {
         print(pointID);
@@ -32,20 +37,20 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
         SelectedPosID = pointID;
         //if(AddMode == true)
         {
-        /*GameObject SettingPaint = Instantiate(PaintToSet);
-        Material newMaterial = new Material(PaintToSet.GetComponent<Renderer>().material);
-        SettingPaint.GetComponent<Renderer>().material = newMaterial;*/
+            /*GameObject SettingPaint = Instantiate(PaintToSet);
+            Material newMaterial = new Material(PaintToSet.GetComponent<Renderer>().material);
+            SettingPaint.GetComponent<Renderer>().material = newMaterial;*/
 
-        //print(testName);
+            //print(testName);
 
             //PaintToSet = testBall;
-           // PaintToSet.transform.position = this.transform.position;
+            // PaintToSet.transform.position = this.transform.position;
 
         }
         print(AddMode);
-        if(AddMode == true)
+        if (AddMode == true)
         {
-            if(newPaint == null)
+            if (newPaint == null)
             {
                 GameObject SettingPaint = Instantiate(PaintSet);
                 Material newMaterial = new Material(PaintSet.GetComponent<Renderer>().material);
@@ -53,16 +58,23 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
                 SettingPaint.GetComponent<Renderer>().material.mainTexture = textureForPaint;
                 SettingPaint.transform.position = this.transform.position;
                 newPaint = SettingPaint;
-                newPaint.transform.localScale = new Vector3(2f * (float)((float)textureForPaint.width / (float)textureForPaint.height), 2f, 0.25f);
+                TextureTolerence = (float)textureForPaint.width / (float)textureForPaint.height;
+                newPaint.transform.localScale = new Vector3(SeletScale * (float)(TextureTolerence), SeletScale, 0.25f);
                 //print(textureForPaint.name);
             }
             else
             {
                 newPaint.transform.position = this.transform.position;
+
             }
         }
 
     }
+
+    
+
+    
+    
 
 
 

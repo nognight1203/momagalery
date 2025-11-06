@@ -13,6 +13,7 @@ public class UIControler : MonoBehaviour
     public GameObject Add;
     public GameObject Done;
     public GameObject Cancel;
+    public GameObject PaintScaleButtome;
     
 
     public void ShowChosingPaintsUI()
@@ -30,9 +31,11 @@ public class UIControler : MonoBehaviour
     //AddMode
     public void AddModeON()
     {
+        PointTrigger.SeletScale = (float)PaintScale.mid; PointTrigger.scalePaint = mid.ToString();
         Add.SetActive(false);
         Done.SetActive(true);
         Cancel.SetActive(true);
+        PaintScaleButtome.SetActive(true);
         PointTrigger.AddMode = true;
     }
     public void AddModeOFF()
@@ -40,6 +43,7 @@ public class UIControler : MonoBehaviour
         Add.SetActive(true);
         Done.SetActive(false);
         Cancel.SetActive(false);
+        PaintScaleButtome.SetActive(false);
         PointTrigger.AddMode = false;
     }
     public void AddDone()
@@ -57,6 +61,31 @@ public class UIControler : MonoBehaviour
     public void AddCancel()
     {
         Destroy(PointTrigger.newPaint);
+    }
+
+    enum PaintScale
+    {
+        max = 4,
+        mid = 2,
+        min = 1
+    }
+    float max = (float)PaintScale.max;
+    float mid = (float)PaintScale.mid;
+    float min = (float)PaintScale.min;
+    public void SelectScaleMax()
+    {
+        PointTrigger.SeletScale = (float)PaintScale.max; PointTrigger.scalePaint = max.ToString();
+        PointTrigger.newPaint.transform.localScale = new Vector3(PointTrigger.SeletScale * (float)(PointTrigger.TextureTolerence), PointTrigger.SeletScale, 0.25f);
+    }
+    public void SelectScaleMid()
+    {
+        PointTrigger.SeletScale = (float)PaintScale.mid; PointTrigger.scalePaint = mid.ToString();
+        PointTrigger.newPaint.transform.localScale = new Vector3(PointTrigger.SeletScale * (float)(PointTrigger.TextureTolerence), PointTrigger.SeletScale, 0.25f);
+    }
+    public void SelectScaleMin()
+    {
+        PointTrigger.SeletScale = (float)PaintScale.min; PointTrigger.scalePaint = min.ToString();
+        PointTrigger.newPaint.transform.localScale = new Vector3(PointTrigger.SeletScale * (float)(PointTrigger.TextureTolerence), PointTrigger.SeletScale, 0.25f);
     }
 
 

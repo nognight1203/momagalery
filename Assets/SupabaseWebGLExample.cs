@@ -42,8 +42,14 @@ public class SupabaseWebGLExample : MonoBehaviour
     public RawImage SelectedPicture;
 
     [Header("All DownLoad Texture")]
-    Dictionary<string,GameObject> TextureIamge = new Dictionary<string,GameObject>();
+    public static Dictionary<string,GameObject> TextureIamge = new Dictionary<string,GameObject>();
     public GameObject PaintTextureContainter;
+
+
+    public void Start()
+    {
+        LoadGallery();
+    }
 
     /// <summary>
     /// 上傳圖片
