@@ -20,10 +20,25 @@ public class FirebaseWebRequest : MonoBehaviour
     public string dd;
     public string dd2;
     public string dd3;
+
+    public GameObject DeleteButton;
     public void testsend()
     {
         
         StartCoroutine(SetValue(PointTrigger.SelectedPosID, PointTrigger.newPaint.GetComponent<Renderer>().material.mainTexture.name,PointTrigger.scalePaint));
+        PointTrigger.newPaint.AddComponent<PaintTrigger>();
+        PointTrigger.newPaint.GetComponent<PaintTrigger>().paintID = PointTrigger.SelectedPosID;
+        PointTrigger.newPaint.GetComponent<PaintTrigger>().FirebaseWebRequest = this;
+        PointTrigger.newPaint.GetComponent<PaintTrigger>().paintTextureName = PointTrigger.newPaint.GetComponent<Renderer>().material.mainTexture.name;
+        PointTrigger.newPaint.GetComponent<PaintTrigger>().scale = float.Parse(PointTrigger.scalePaint);
+        PointTrigger.newPaint.GetComponent<PaintTrigger>().DeleteButton = DeleteButton;
+       // PointTrigger.newPaint = null;
+       // PointTrigger.selectedPaint = null;
+    }
+
+    private void Start()
+    {
+        GetAll();
     }
 
 
@@ -51,6 +66,8 @@ public class FirebaseWebRequest : MonoBehaviour
         {
             Debug.Log($"✅ Saved paint: {paintName}");
         }
+        PointTrigger.newPaint = null;
+        PointTrigger.selectedPaint = null;
     }
 
 
@@ -96,13 +113,16 @@ public class FirebaseWebRequest : MonoBehaviour
 
                 GameObject SetPaint = Instantiate(seterPanitPrefab);
                 SetPaint.transform.position = PaintSetPointsSetter.PointsDic[id].transform.position;
-                Texture texture = SupabaseWebGLExample.TextureIamge[data.paintsName].GetComponent<Renderer>().material.mainTexture;
-                SetPaint.GetComponent<Renderer>().material.mainTexture = texture;
+               // Texture texture = SupabaseWebGLExample.TextureIamge[data.paintsName].GetComponent<Renderer>().material.mainTexture;
+               // SetPaint.GetComponent<Renderer>().material.mainTexture = texture;
                 SetPaint.AddComponent<PaintTrigger>();
                 SetPaint.GetComponent<PaintTrigger>().paintID = id;
                 SetPaint.GetComponent<PaintTrigger>().FirebaseWebRequest = this;
+                SetPaint.GetComponent<PaintTrigger>().paintTextureName = data.paintsName;
+                SetPaint.GetComponent<PaintTrigger>().scale = float.Parse(data.paintsScale);
+                SetPaint.GetComponent<PaintTrigger>().DeleteButton = DeleteButton;
                 
-                SetPaint.transform.localScale = new Vector3(float.Parse(data.paintsScale) * (float)texture.width / (float)texture.height, float.Parse(data.paintsScale), 0.25f);
+                //SetPaint.transform.localScale = new Vector3(float.Parse(data.paintsScale) * (float)texture.width / (float)texture.height, float.Parse(data.paintsScale), 0.25f);
 
 
                 Debug.Log($"🖼️ ID: {id} | Name: {data.paintsName} | Scale: {data.paintsScale}");

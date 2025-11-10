@@ -8,6 +8,7 @@ public class UIControler : MonoBehaviour
 
     public GameObject UI;
     public GameObject PaintsScrollView;
+    public GameObject DeletButton;
 
     [Header("Add Mode")]
     public GameObject Add;
@@ -49,8 +50,8 @@ public class UIControler : MonoBehaviour
     public void AddDone()
     {
         PointTrigger.PaintDataDic.Add(PointTrigger.SelectedPosID,PointTrigger.newPaint);
-        PointTrigger.newPaint = null;
-        PointTrigger.selectedPaint = null;
+        //PointTrigger.newPaint = null;
+        //PointTrigger.selectedPaint = null;
         foreach(var value in PointTrigger.PaintDataDic)
         {
             string textureName = value.Value.GetComponent<Renderer>().material.mainTexture.name.ToString();
@@ -88,6 +89,12 @@ public class UIControler : MonoBehaviour
         PointTrigger.newPaint.transform.localScale = new Vector3(PointTrigger.SeletScale * (float)(PointTrigger.TextureTolerence), PointTrigger.SeletScale, 0.25f);
     }
 
+    public void DeletePaint()
+    {
+        PaintTrigger.seletSetPaint.GetComponent<PaintTrigger>().Delete();
+        DeletButton.SetActive(false);
+
+    }
 
 
 }

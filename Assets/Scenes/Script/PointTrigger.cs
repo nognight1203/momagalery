@@ -61,6 +61,8 @@ public class PointTrigger : MonoBehaviour, IPointerClickHandler
                 TextureTolerence = (float)textureForPaint.width / (float)textureForPaint.height;
                 newPaint.transform.localScale = new Vector3(SeletScale * (float)(TextureTolerence), SeletScale, 0.25f);
                 //print(textureForPaint.name);
+
+                
             }
             else
             {
