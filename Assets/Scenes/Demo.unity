@@ -2190,6 +2190,7 @@ GameObject:
   - component: {fileID: 461648657}
   - component: {fileID: 461648662}
   - component: {fileID: 461648663}
+  - component: {fileID: 461648664}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -2247,7 +2248,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 461648656}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa01a485bc6af4a56ab1f9a5abb553b1, type: 3}
   m_Name: 
@@ -2338,6 +2339,27 @@ MonoBehaviour:
   dd2: faee
   dd3: 
   DeleteButton: {fileID: 409706680}
+--- !u!114 &461648664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461648656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daeacc2d53c093941963629e01d61e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerBody: {fileID: 859374928}
+  mainCamera: {fileID: 1148098818}
+  moveSpeed: 3
+  rotateSpeed: 0.3
+  pitchSpeed: 0.2
+  minPitch: -30
+  maxPitch: 60
+  invertMouseX: 1
+  invertMouseY: 1
 --- !u!1 &572198010
 GameObject:
   m_ObjectHideFlags: 0
@@ -6015,7 +6037,7 @@ Transform:
   m_GameObject: {fileID: 1299992610}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.12, y: 0.32, z: 15.15}
+  m_LocalPosition: {x: -16.37, y: 0.32, z: 15.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9496,7 +9518,7 @@ Transform:
   m_GameObject: {fileID: 2138045519}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.567213, y: 3.2481296, z: -7.263056}
+  m_LocalPosition: {x: -13.96, y: 3.2481296, z: -7.263056}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -43,6 +43,9 @@ public class PaintSetPointsSetter : MonoBehaviour
         SetHightAndWight();
         ActivePointsDic(HorizenCount,VerticleCount);
 
+        ConerLeftBottom.SetActive(false);
+        ConerRightTop.SetActive(false);
+
        
     }
 

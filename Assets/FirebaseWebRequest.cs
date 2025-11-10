@@ -113,6 +113,7 @@ public class FirebaseWebRequest : MonoBehaviour
 
                 GameObject SetPaint = Instantiate(seterPanitPrefab);
                 SetPaint.transform.position = PaintSetPointsSetter.PointsDic[id].transform.position;
+                SetPaint.transform.rotation = PaintSetPointsSetter.PointsDic[id].transform.rotation;
                // Texture texture = SupabaseWebGLExample.TextureIamge[data.paintsName].GetComponent<Renderer>().material.mainTexture;
                // SetPaint.GetComponent<Renderer>().material.mainTexture = texture;
                 SetPaint.AddComponent<PaintTrigger>();
