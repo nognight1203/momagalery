@@ -37,7 +37,7 @@ public class CameraFollow : MonoBehaviour
         CameraPos();
 
 
-        if (Input.GetButtonDown("Fire1"))
+       /* if (Input.GetButtonDown("Fire1"))
         {
             CameraUpAndDown = true;
             LastMouseY = Input.mousePosition.y;
@@ -56,7 +56,7 @@ public class CameraFollow : MonoBehaviour
             {
                 CameraFacing();
             }
-        }
+        }*/
     }
 
   
