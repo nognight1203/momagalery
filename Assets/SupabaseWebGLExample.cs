@@ -47,6 +47,7 @@ public class SupabaseWebGLExample : MonoBehaviour
     public static Dictionary<string,GameObject> TextureIamge = new Dictionary<string,GameObject>();
     public GameObject PaintTextureContainter;
 
+    public FirebaseWebRequest fbWRequest;
 
     public void Start()
     {
@@ -85,8 +86,11 @@ public class SupabaseWebGLExample : MonoBehaviour
          {
              StartCoroutine(Deletecoroutinne(SelectGalleryName));
          }*/
+
         Destroy(GalleryItem.selectedGalleryItem.GetComponent<GalleryItem>().container);
         GalleryItem.selectedGalleryItem = null;
+
+        fbWRequest.DeleteNoTexturePaint(SelectGalleryName);
 
     }
 
@@ -112,6 +116,45 @@ public class SupabaseWebGLExample : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("✅ 上傳成功");
+            
+            //
+            GameObject newItem = Instantiate(imageItemPrefab, contentParent);
+            RawImage rawImage = newItem.GetComponentInChildren<RawImage>();
+            LayoutElement layout = newItem.GetComponent<LayoutElement>();
+
+            //貼圖存放位置
+            TextureIamge.Add(fileName, Instantiate(PaintTextureContainter));
+            GameObject texureImage = TextureIamge[fileName];
+            texureImage.transform.GetComponent<Renderer>().material.mainTexture = texture;
+            texureImage.transform.GetComponent<Renderer>().material.mainTexture.name = fileName;
+            print(texureImage.transform.GetComponent<Renderer>().material.mainTexture.name);
+
+            rawImage.texture = texture;
+            RectTransform rt = rawImage.rectTransform;
+            rt.anchorMin = new Vector2(0, 0);
+            rt.anchorMax = new Vector2(1, 1);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            GalleryItem item = rawImage.GetComponent<GalleryItem>();
+            item.selectedPicture = SelectedPicture;
+
+            // item.pointTrigger = pointTrigger;
+
+            item.setPaintings = manerger.GetComponent<SetPaintings>();
+            if (item != null)
+            {
+                item.Init(fileName, texture, paintToSet); // 或你的檔名
+            }
+
+            float fixedWidth = contentParent.rect.width;
+            float aspect = (float)texture.height / texture.width;
+            float targetHeight = fixedWidth * aspect;
+            //AspectRatioFitter fitter = rawImage.GetComponent<AspectRatioFitter>();
+            //fitter.aspectRatio = aspect;
+            layout.preferredWidth = fixedWidth;
+            layout.preferredHeight = targetHeight;
+
         }
         else
         {
@@ -339,6 +382,8 @@ public class SupabaseWebGLExample : MonoBehaviour
 
         return readableTex;
     }
+
+
 
     
 }

@@ -21,6 +21,7 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser.Examples
                     fileInfoText;
 
         public GameObject testIamge;
+        public RawImage ShowIamge;
 
         
 
@@ -73,6 +74,7 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser.Examples
             if (file[0].IsImage())
             {
                 testIamge.transform.GetComponent<Renderer>().material.mainTexture = file[0].ToTexture2D();
+                ShowIamge.texture = file[0].ToTexture2D();
             }
 
         }

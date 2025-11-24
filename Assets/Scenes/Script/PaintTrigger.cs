@@ -14,6 +14,9 @@ public class PaintTrigger : MonoBehaviour, IPointerClickHandler
 
     public FirebaseWebRequest FirebaseWebRequest;
 
+    public static Dictionary<string, GameObject> ActivePaints = new Dictionary<string, GameObject>();
+
+     
     public void OnPointerClick(PointerEventData eventData)
     {
 
@@ -34,6 +37,7 @@ public class PaintTrigger : MonoBehaviour, IPointerClickHandler
     void Start()
     {
         StartCoroutine(WaitForKey(paintTextureName));
+        ActivePaints.Add(paintID,this.gameObject);
     }
 
     // Update is called once per frame

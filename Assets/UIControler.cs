@@ -15,7 +15,18 @@ public class UIControler : MonoBehaviour
     public GameObject Done;
     public GameObject Cancel;
     public GameObject PaintScaleButtome;
+
+    [Header("UploadPicture")]
+    public GameObject uploadui;
     
+    public void ShowUploadPictureUI()
+    {
+        uploadui.SetActive(true);
+    }
+    public void HideUploadPictureUI()
+    {
+        uploadui.SetActive(false);
+    }
 
     public void ShowChosingPaintsUI()
     {
@@ -38,6 +49,11 @@ public class UIControler : MonoBehaviour
         Cancel.SetActive(true);
         PaintScaleButtome.SetActive(true);
         PointTrigger.AddMode = true;
+
+        foreach(GameObject gameObject in PaintSetPointsSetter.PointsDic.Values)
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
+        }
     }
     public void AddModeOFF()
     {
@@ -46,6 +62,11 @@ public class UIControler : MonoBehaviour
         Cancel.SetActive(false);
         PaintScaleButtome.SetActive(false);
         PointTrigger.AddMode = false;
+
+        foreach (GameObject gameObject in PaintSetPointsSetter.PointsDic.Values)
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
     }
     public void AddDone()
     {
@@ -97,6 +118,6 @@ public class UIControler : MonoBehaviour
     }
 
     
-
+    
 
 }

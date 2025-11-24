@@ -48,6 +48,8 @@ public class GalleryItem : MonoBehaviour
         if(PointTrigger.newPaint != null)
         {
             PointTrigger.newPaint.GetComponent<Renderer>().material.mainTexture = texture2D;
+            PointTrigger.TextureTolerence = (float)texture2D.width / (float)texture2D.height;
+            PointTrigger.newPaint.transform.localScale = new Vector3(PointTrigger.SeletScale * (float)(PointTrigger.TextureTolerence), PointTrigger.SeletScale, 0.25f);
         }
         
         SupabaseWebGLExample.SelectGalleryName = fileName;

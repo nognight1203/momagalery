@@ -10,6 +10,8 @@ public class FirebaseWebRequest : MonoBehaviour
 {
     public string dbUrl;
 
+    private string version = "1.0";
+
     public GameObject seterPanitPrefab;
 
     /* public void SavePaint(string paintID, string paintName)
@@ -46,7 +48,7 @@ public class FirebaseWebRequest : MonoBehaviour
     IEnumerator SetValue(string paintID, string paintName,string scale)
     {
         string url = $"{dbUrl}PaintID/{paintID}.json";
-        PaintDatasFirebase Data = new PaintDatasFirebase {paintsName = paintName,paintsScale = scale };
+        PaintDatasFirebase Data = new PaintDatasFirebase {paintsName = paintName,paintsScale = scale,Version = version };
         //string json = $"\"{paintName}\""; // 或 $"\"{paintName}\""
         string json = JsonUtility.ToJson(Data);
         UnityWebRequest request = UnityWebRequest.Put(url, json);
@@ -122,11 +124,25 @@ public class FirebaseWebRequest : MonoBehaviour
                 SetPaint.GetComponent<PaintTrigger>().paintTextureName = data.paintsName;
                 SetPaint.GetComponent<PaintTrigger>().scale = float.Parse(data.paintsScale);
                 SetPaint.GetComponent<PaintTrigger>().DeleteButton = DeleteButton;
+
+               // PaintTrigger.ActivePaints.Add(id, SetPaint);
                 
                 //SetPaint.transform.localScale = new Vector3(float.Parse(data.paintsScale) * (float)texture.width / (float)texture.height, float.Parse(data.paintsScale), 0.25f);
 
 
                 Debug.Log($"🖼️ ID: {id} | Name: {data.paintsName} | Scale: {data.paintsScale}");
+            }
+        }
+    }
+
+    public void DeleteNoTexturePaint(string textureName)
+    {
+       foreach(GameObject gameObject in PaintTrigger.ActivePaints.Values)
+        {
+            print(gameObject.GetComponent<PaintTrigger>().paintTextureName);
+            if(gameObject.GetComponent<PaintTrigger>().paintTextureName == textureName)
+            {
+                gameObject.GetComponent<PaintTrigger>().Delete();
             }
         }
     }
@@ -162,4 +178,17 @@ public class FirebaseWebRequest : MonoBehaviour
             Debug.Log($"✅ 成功刪除 {paintID}");
         }
     }
+}
+
+public class PaintDatasFirebase
+{
+    //public  string paintsID ;
+    public string paintsName;
+    public string paintsScale;
+    public string Version;
+    //public  GameObject paintInstence;
+
+
+
+
 }

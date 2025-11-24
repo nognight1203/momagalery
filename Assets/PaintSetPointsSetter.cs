@@ -51,17 +51,7 @@ public class PaintSetPointsSetter : MonoBehaviour
 
     private void Update()
     {
-        if(test == true)
-        {
-            PointsDic[testStr].SetActive(false);
-        }
-        if (PointsDic[testStr] != null)
-        {
-            if (test == false && PointsDic[testStr].activeSelf == false)
-            {
-                PointsDic[testStr].SetActive(true);
-            }
-        }
+        
     }
 
     void SetHightAndWight() {
@@ -104,6 +94,7 @@ public class PaintSetPointsSetter : MonoBehaviour
                // print(pointID);
                 PointsDic.Add(pointID,gameObject);
                 gameObject.GetComponent<PointTrigger>().pointID = pointID;
+                gameObject.GetComponent<MeshRenderer>().enabled = false;
             }
         }
         
@@ -112,20 +103,7 @@ public class PaintSetPointsSetter : MonoBehaviour
 
 }
 
-public class PaintList
-{
-    public PaintDatasFirebase[] PaintDatas;
-}
 
 
-public  class PaintDatasFirebase
-{
-    //public  string paintsID ;
-    public string paintsName ;
-    public string paintsScale;
-    //public  GameObject paintInstence;
-
-    
 
 
-}
