@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -89,6 +90,7 @@ public class PaintSetPointsSetter : MonoBehaviour
             {
                 GameObject gameObject = Instantiate(PointGizmo, this.transform);
                 gameObject.transform.SetLocalPositionAndRotation(new Vector3(toleranceWeight * i, toleranceHeight * t), new Quaternion(0, 0, 0, 0));
+                gameObject.transform.AddComponent<PointTrigger>();
                 //print($"id = {WallID}-{i}-{t}");
                 string pointID = $"{WallID}-{i}-{t}";
                // print(pointID);
