@@ -31,6 +31,8 @@ public class SupabaseWebGLExample : MonoBehaviour
 
     public FrostweepGames.Plugins.WebGLFileBrowser.Examples.LoadFileExample loadFileExample;
 
+    public static string SelectGalleryName;
+
     [Header("UI Settings")]
     public RectTransform contentParent;
     public GameObject imageItemPrefab;
@@ -79,7 +81,13 @@ public class SupabaseWebGLExample : MonoBehaviour
 
     public void DeletImage()
     {
-        StartCoroutine(Deletecoroutinne("test02.png"));
+        /* if (SelectGalleryName != null)
+         {
+             StartCoroutine(Deletecoroutinne(SelectGalleryName));
+         }*/
+        Destroy(GalleryItem.selectedGalleryItem.GetComponent<GalleryItem>().container);
+        GalleryItem.selectedGalleryItem = null;
+
     }
 
     public void LoadGallery()

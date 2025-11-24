@@ -12,6 +12,8 @@ public class GalleryItem : MonoBehaviour
     Texture2D texture2D;
     GameObject GetObject;
     public RawImage selectedPicture;
+    public static GameObject selectedGalleryItem;
+    public GameObject container;
 
     
 
@@ -48,5 +50,7 @@ public class GalleryItem : MonoBehaviour
             PointTrigger.newPaint.GetComponent<Renderer>().material.mainTexture = texture2D;
         }
         
+        SupabaseWebGLExample.SelectGalleryName = fileName;
+        selectedGalleryItem = this.gameObject;
     }
 }

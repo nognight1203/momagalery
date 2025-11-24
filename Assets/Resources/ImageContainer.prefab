@@ -146,6 +146,9 @@ MonoBehaviour:
   button: {fileID: 8724167756343868674}
   rawImage: {fileID: 0}
   fileName: 
+  setPaintings: {fileID: 0}
+  selectedPicture: {fileID: 0}
+  container: {fileID: 1333822938110333299}
 --- !u!114 &8724167756343868674
 MonoBehaviour:
   m_ObjectHideFlags: 0
