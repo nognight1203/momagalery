@@ -10,140 +10,159 @@ public class PlayerController : MonoBehaviour
 
     [Header("Settings")]
     public float moveSpeed = 5f;
-    public float rotateSpeed = 2f;    // 滑鼠水平旋轉速度
-    public float pitchSpeed = 1.5f;   // 相機上下旋轉速度
+    public float rotateSpeed = 2f;
+    public float pitchSpeed = 1.5f;
     public float minPitch = -30f;
     public float maxPitch = 60f;
-    public bool invertMouseX = false; // 左右反向
-    public bool invertMouseY = false; // 上下反向
+    public bool invertX = false;
+    public bool invertY = false;
 
-    private float yaw = 0f;
-    private float pitch = 20f;
+    float yaw;
+    float pitch;
 
-    private Vector2 lastMousePos;
-    private bool isDragging = false;
+    bool moveForward, moveBack, moveLeft, moveRight;
 
-    // UI 按鈕長按控制
-    private bool moveForward, moveBack, moveLeft, moveRight;
+    // PC 滑鼠控制
+    bool mouseDragging = false;
+    Vector2 lastMousePos;
+    bool isFirstDragFrame = false;
 
     void Start()
     {
-        if (mainCamera == null)
-            mainCamera = Camera.main.transform;
-
+        if (mainCamera == null) mainCamera = Camera.main.transform;
         pitch = mainCamera.localEulerAngles.x;
         yaw = playerBody.eulerAngles.y;
     }
 
     void Update()
     {
-        HandleMouseRotation();
-        HandleMovement();
+        HandleMovement();      // 按鈕 + 鍵盤
+        HandleRotationPC();    // PC 滑鼠旋轉
+        HandleRotationMobile();// 手機旋轉
     }
 
-    // 🔹 只阻擋 Scrollbar 的判斷
-    bool IsPointerOverScrollbar()
+    // -------------------------------
+    // 判斷是否點到 UI（ScrollBar / Button / InputField）
+    bool IsPointerOverUI(Vector2 pos)
     {
         PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = Input.mousePosition;
+        eventData.position = pos;
 
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
 
         foreach (var r in results)
         {
-            // ⭐ 只有 Tag = "Scrollbar" 才阻擋旋轉
-            if (r.gameObject.CompareTag("Scrollbar"))
+            if (r.gameObject.GetComponent<UnityEngine.UI.Selectable>())
                 return true;
         }
         return false;
     }
 
-    // 🔹 移動（角色前方向）
+    // -------------------------------
+    // 鍵盤 + UI 按鈕移動
     void HandleMovement()
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        // UI Button 模擬方向
         if (moveForward) v += 1f;
         if (moveBack) v -= 1f;
         if (moveLeft) h -= 1f;
         if (moveRight) h += 1f;
 
-        Vector3 inputDir = new Vector3(h, 0f, v).normalized;
+        Vector3 dir = new Vector3(h, 0, v).normalized;
 
-        if (inputDir.magnitude >= 0.1f)
+        if (dir.sqrMagnitude > 0.01f)
         {
-            Vector3 moveDir = playerBody.rotation * inputDir;
+            Vector3 moveDir = playerBody.rotation * dir;
             playerBody.position += moveDir * moveSpeed * Time.deltaTime;
         }
     }
 
-    // 🔹 滑鼠/觸控旋轉（排除 Scrollbar）
-    void HandleMouseRotation()
+    // -------------------------------
+    // PC 滑鼠旋轉（同時可移動）
+    void HandleRotationPC()
     {
-        // ⭐ 如果鼠標在 Scrollbar 上 → 直接不處理旋轉
-        if (IsPointerOverScrollbar())
+        if (Application.isMobilePlatform) return;
+
+        if (Input.GetMouseButtonDown(0))
         {
-            isDragging = false;
+            if (IsPointerOverUI(Input.mousePosition)) return; // 點 UI 不旋轉
+            mouseDragging = true;
+            isFirstDragFrame = true;
+            lastMousePos = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButtonUp(0)) mouseDragging = false;
+        if (!mouseDragging) return;
+
+        Vector2 currentPos = Input.mousePosition;
+
+        if (isFirstDragFrame)
+        {
+            lastMousePos = currentPos;
+            isFirstDragFrame = false;
             return;
         }
 
-        // 滑鼠拖曳開始
-        if (Input.GetMouseButtonDown(0))
+        Vector2 delta = currentPos - lastMousePos;
+        lastMousePos = currentPos;
+
+        float deltaX = invertX ? -delta.x : delta.x;
+        float deltaY = invertY ? -delta.y : delta.y;
+
+        yaw += deltaX * rotateSpeed;
+        pitch -= deltaY * pitchSpeed;
+        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+
+        ApplyRotation();
+    }
+
+    // -------------------------------
+    // 手機旋轉（多點觸控 + UI 遮擋，同時可移動）
+    void HandleRotationMobile()
+    {
+        if (!Application.isMobilePlatform) return;
+        if (Input.touchCount == 0) return;
+
+        Touch? rotateTouch = null;
+
+        for (int i = 0; i < Input.touchCount; i++)
         {
-            isDragging = true;
-            lastMousePos = Input.mousePosition;
+            Touch t = Input.GetTouch(i);
+            if (IsPointerOverUI(t.position)) continue; // 只阻擋 UI
+            rotateTouch = t;
+            break;
         }
-        if (Input.GetMouseButtonUp(0))
-            isDragging = false;
 
-        // 滑鼠拖曳旋轉
-        if (isDragging)
+        if (rotateTouch == null) return;
+
+        Touch rt = rotateTouch.Value;
+        if (rt.phase == TouchPhase.Moved)
         {
-            Vector2 delta = (Vector2)Input.mousePosition - lastMousePos;
-            lastMousePos = Input.mousePosition;
+            float deltaX = invertX ? -rt.deltaPosition.x : rt.deltaPosition.x;
+            float deltaY = invertY ? -rt.deltaPosition.y : rt.deltaPosition.y;
 
-            float deltaX = invertMouseX ? -delta.x : delta.x;
-            float deltaY = invertMouseY ? -delta.y : delta.y;
-
-            yaw += deltaX * rotateSpeed;
-            pitch -= deltaY * pitchSpeed;
+            yaw += deltaX * rotateSpeed * 0.1f;
+            pitch -= deltaY * pitchSpeed * 0.1f;
             pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
 
-            playerBody.rotation = Quaternion.Euler(0f, yaw, 0f);
-
-            Vector3 camAngles = mainCamera.localEulerAngles;
-            camAngles.x = pitch;
-            mainCamera.localEulerAngles = camAngles;
-        }
-
-        // 觸控支援 -------------------------------------------------
-        if (Input.touchCount > 0)
-        {
-            Touch t = Input.GetTouch(0);
-
-            // ⭐ 手機觸控版本一樣需要排除 Scrollbar
-            if (IsPointerOverScrollbar())
-                return;
-
-            if (t.phase == TouchPhase.Moved)
-            {
-                yaw += t.deltaPosition.x * rotateSpeed * 0.1f;
-                pitch -= t.deltaPosition.y * pitchSpeed * 0.1f;
-                pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
-
-                playerBody.rotation = Quaternion.Euler(0f, yaw, 0f);
-
-                Vector3 camAngles = mainCamera.localEulerAngles;
-                camAngles.x = pitch;
-                mainCamera.localEulerAngles = camAngles;
-            }
+            ApplyRotation();
         }
     }
 
-    // 🔹 UI Button 事件
+    // -------------------------------
+    void ApplyRotation()
+    {
+        playerBody.rotation = Quaternion.Euler(0, yaw, 0);
+        Vector3 camAngles = mainCamera.localEulerAngles;
+        camAngles.x = pitch;
+        mainCamera.localEulerAngles = camAngles;
+    }
+
+    // -------------------------------
+    // UI 按鈕事件
     public void OnMoveForwardDown() => moveForward = true;
     public void OnMoveForwardUp() => moveForward = false;
     public void OnMoveBackDown() => moveBack = true;
