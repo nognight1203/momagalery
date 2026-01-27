@@ -43,6 +43,21 @@ public class FirebaseWebRequest : MonoBehaviour
         GetAll();
     }
 
+    public void SettingPassword(string password)
+    {
+        StartCoroutine(SetPasswordValue(password));
+    }
+
+    IEnumerator SetPasswordValue(string password)
+    {
+        string url = $"{dbUrl}Password/password.json";
+        string json = $"{password}.json";
+        UnityWebRequest request = UnityWebRequest.Put(url,json);
+
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return request.SendWebRequest();
+    }
 
 
     IEnumerator SetValue(string paintID, string paintName,string scale)

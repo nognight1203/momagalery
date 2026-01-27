@@ -18,6 +18,10 @@ public class UIControler : MonoBehaviour
 
     [Header("UploadPicture")]
     public GameObject uploadui;
+
+    [Header("Login")]
+    public GameObject LoginUI;
+    public GameObject LoginButton;
     
     public void ShowUploadPictureUI()
     {
@@ -37,7 +41,7 @@ public class UIControler : MonoBehaviour
     public void CloseChosingPaintsUI()
     {
         PaintsScrollView.SetActive(false);
-        Setting.SetActive(true);
+       // Setting.SetActive(true);
     }
 
     //AddMode
@@ -117,6 +121,30 @@ public class UIControler : MonoBehaviour
 
     }
 
+    public void OpenLoginUI()
+    {
+        if (PasswordInput.SafePass == false)
+        {
+            LoginUI.SetActive(true);
+        }
+        else
+        {
+            ShowChosingPaintsUI();
+        }
+    }
+    public void PressLoginButton()
+    {
+        if (PasswordInput.SafePass == true)
+        {
+            ShowChosingPaintsUI();
+            LoginUI.SetActive (false);
+        }
+    }
+
+    public void PressUserButton()
+    {
+        LoginUI.SetActive(false);
+    }
     
     
 

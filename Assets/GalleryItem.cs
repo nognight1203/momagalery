@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class GalleryItem : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GalleryItem : MonoBehaviour
     Texture2D texture2D;
     GameObject GetObject;
     public RawImage selectedPicture;
+    public float selectedPicHeight;
+    public float selectedPicWidth;
     public static GameObject selectedGalleryItem;
     public GameObject container;
 
@@ -30,6 +33,7 @@ public class GalleryItem : MonoBehaviour
         {
             OnClickItem();
             selectedPicture.texture = texture;
+            
         });
     }
 
@@ -54,5 +58,9 @@ public class GalleryItem : MonoBehaviour
         
         SupabaseWebGLExample.SelectGalleryName = fileName;
         selectedGalleryItem = this.gameObject;
+        float fixedWidth = 100;
+        float aspect = (float)texture2D.height / texture2D.width;
+        float targetHeight = fixedWidth * aspect;
+        selectedPicture.transform.localScale = new Vector3((float)1.822,(float) 1.822 * aspect, (float) 1.822);
     }
 }

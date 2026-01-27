@@ -124,25 +124,19 @@ public class PlayerController : MonoBehaviour
     void HandleRotationMobile()
     {
         if (!Application.isMobilePlatform) return;
-        if (Input.touchCount == 0) return;
 
-        Touch? rotateTouch = null;
+        // 🔥 只允許單指旋轉
+        if (Input.touchCount != 1) return;
 
-        for (int i = 0; i < Input.touchCount; i++)
+        Touch t = Input.GetTouch(0);
+
+        // 點到 UI 不旋轉
+        if (IsPointerOverUI(t.position)) return;
+
+        if (t.phase == TouchPhase.Moved)
         {
-            Touch t = Input.GetTouch(i);
-            if (IsPointerOverUI(t.position)) continue; // 只阻擋 UI
-            rotateTouch = t;
-            break;
-        }
-
-        if (rotateTouch == null) return;
-
-        Touch rt = rotateTouch.Value;
-        if (rt.phase == TouchPhase.Moved)
-        {
-            float deltaX = invertX ? -rt.deltaPosition.x : rt.deltaPosition.x;
-            float deltaY = invertY ? -rt.deltaPosition.y : rt.deltaPosition.y;
+            float deltaX = invertX ? -t.deltaPosition.x : t.deltaPosition.x;
+            float deltaY = invertY ? -t.deltaPosition.y : t.deltaPosition.y;
 
             yaw += deltaX * rotateSpeed * 0.1f;
             pitch -= deltaY * pitchSpeed * 0.1f;
