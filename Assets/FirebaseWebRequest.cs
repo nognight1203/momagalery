@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UIElements;
@@ -24,6 +25,8 @@ public class FirebaseWebRequest : MonoBehaviour
     public string dd3;
 
     public GameObject DeleteButton;
+
+    public TMP_InputField NewPassword;
     public void testsend()
     {
         
@@ -41,22 +44,42 @@ public class FirebaseWebRequest : MonoBehaviour
     private void Start()
     {
         GetAll();
+        StartCoroutine(GetPassword());
+
     }
 
-    public void SettingPassword(string password)
+    public void GetiingPassword()
     {
+        StartCoroutine(GetPassword());
+    }
+
+    public void SettingPassword()
+    {
+        string password = NewPassword.text;
         StartCoroutine(SetPasswordValue(password));
     }
 
     IEnumerator SetPasswordValue(string password)
     {
         string url = $"{dbUrl}Password/password.json";
-        string json = $"{password}.json";
+        string json = $"\"{password}\"";
         UnityWebRequest request = UnityWebRequest.Put(url,json);
 
         request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
+    }
+
+    IEnumerator GetPassword()
+    {
+        string url = $"{dbUrl}Password/password.json";
+        UnityWebRequest request = UnityWebRequest.Get(url);
+
+        yield return request.SendWebRequest();
+
+        string result = request.downloadHandler.text;
+        string password = result.Replace("\"", "");
+        PasswordInput.password = password;
     }
 
 

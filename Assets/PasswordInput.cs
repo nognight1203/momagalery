@@ -8,6 +8,8 @@ public class PasswordInput : MonoBehaviour, IPointerDownHandler
     public TMP_InputField input;
     static public string passwordCode = "123";
     static public bool SafePass = false;
+    static public string password;
+    
 
     void Update()
     {
@@ -31,11 +33,22 @@ public class PasswordInput : MonoBehaviour, IPointerDownHandler
 
     public void PressLogingButton()
     {
-        if(input.text == passwordCode)
+        if (input.text == passwordCode)
         {
             SafePass = true;
         }
+        if (input.text == password)
+        {
+            SafePass = true;
+        }
+
     }
 
-
+    public void PressChangePassword()
+    {
+        if (input.text == password)
+        {
+            
+        }
+    }
 }

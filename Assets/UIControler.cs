@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class UIControler : MonoBehaviour
@@ -22,7 +23,14 @@ public class UIControler : MonoBehaviour
     [Header("Login")]
     public GameObject LoginUI;
     public GameObject LoginButton;
-    
+    public GameObject PasswordText;
+    public GameObject ConfirmButton;
+    public GameObject CancelButton;
+    public GameObject ChangePasswordText;
+    public GameObject UserButton;
+    public GameObject ChangePasswordButton;
+    public TMP_InputField input;
+
     public void ShowUploadPictureUI()
     {
         uploadui.SetActive(true);
@@ -146,6 +154,29 @@ public class UIControler : MonoBehaviour
         LoginUI.SetActive(false);
     }
     
+    public void ShowChangePasswordUI()
+    {
+        if (input.text == PasswordInput.password)
+        {
+            LoginButton.SetActive(false);
+            ConfirmButton.SetActive(true);
+            PasswordText.SetActive(false);
+            CancelButton.SetActive(true);
+            ChangePasswordText.SetActive(true);
+            UserButton.SetActive(false);
+            ChangePasswordButton.SetActive(false);
+        }
+    }
+    public void HideChangePasswordUI()
+    {
+        LoginButton.SetActive(true);
+        ConfirmButton.SetActive(false);
+        PasswordText.SetActive(true);
+        CancelButton.SetActive(false);
+        ChangePasswordText.SetActive(false);
+        UserButton.SetActive(true);
+        ChangePasswordButton.SetActive(true);
+    }
     
 
 }
