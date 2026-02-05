@@ -1,5 +1,6 @@
-using UnityEngine;
 using System;
+using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace FrostweepGames.Plugins.WebGLFileBrowser.Examples
@@ -75,6 +76,10 @@ namespace FrostweepGames.Plugins.WebGLFileBrowser.Examples
             {
                 testIamge.transform.GetComponent<Renderer>().material.mainTexture = file[0].ToTexture2D();
                 ShowIamge.texture = file[0].ToTexture2D();
+                float fixedWidth = 100;
+                float aspect = (float)ShowIamge.texture.height / ShowIamge.texture.width;
+                float targetHeight = fixedWidth * aspect;
+                ShowIamge.transform.localScale = new Vector3((float)1.822, (float)1.822 * aspect, (float)1.822);
             }
 
         }

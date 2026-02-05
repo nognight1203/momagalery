@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PlayerController : MonoBehaviour
 {
@@ -39,6 +40,17 @@ public class PlayerController : MonoBehaviour
         HandleMovement();      // 按鈕 + 鍵盤
         HandleRotationPC();    // PC 滑鼠旋轉
         HandleRotationMobile();// 手機旋轉
+        StableCharacter();
+    }
+
+    void StableCharacter()
+    {
+        if(playerBody.rotation.x < -0.3 || playerBody.rotation.z < -0.3 || playerBody.rotation.x > 0.3 || playerBody.rotation.z > 0.3)
+        {
+            playerBody.rotation = Quaternion.Euler(0, playerBody.transform.eulerAngles.y, 0);
+            print("校正");
+        }
+       
     }
 
     // -------------------------------

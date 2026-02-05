@@ -10,6 +10,7 @@ public class UIControler : MonoBehaviour
     public GameObject UI;
     public GameObject PaintsScrollView;
     public GameObject DeletButton;
+    public GameObject Close;
 
     [Header("Add Mode")]
     public GameObject Add;
@@ -60,6 +61,7 @@ public class UIControler : MonoBehaviour
         Done.SetActive(true);
         Cancel.SetActive(true);
         PaintScaleButtome.SetActive(true);
+        Close.SetActive(false);
         PointTrigger.AddMode = true;
 
         foreach(GameObject gameObject in PaintSetPointsSetter.PointsDic.Values)
@@ -73,6 +75,7 @@ public class UIControler : MonoBehaviour
         Done.SetActive(false);
         Cancel.SetActive(false);
         PaintScaleButtome.SetActive(false);
+        Close.SetActive(true);
         PointTrigger.AddMode = false;
 
         foreach (GameObject gameObject in PaintSetPointsSetter.PointsDic.Values)

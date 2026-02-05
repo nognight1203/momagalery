@@ -21,6 +21,8 @@ public class SupabaseWebGLExample : MonoBehaviour
 
     [Header("UI")]
     public RawImage displayImage; // 顯示下載的圖片
+    public GameObject Success;
+    public GameObject Fail;
 
     // 範例圖片（你可以用任何 Texture2D）
     public Texture2D imageToUpload;
@@ -82,10 +84,10 @@ public class SupabaseWebGLExample : MonoBehaviour
 
     public void DeletImage()
     {
-        /* if (SelectGalleryName != null)
+         if (SelectGalleryName != null)
          {
              StartCoroutine(Deletecoroutinne(SelectGalleryName));
-         }*/
+         }
 
         Destroy(GalleryItem.selectedGalleryItem.GetComponent<GalleryItem>().container);
         GalleryItem.selectedGalleryItem = null;
@@ -155,11 +157,25 @@ public class SupabaseWebGLExample : MonoBehaviour
             layout.preferredWidth = fixedWidth;
             layout.preferredHeight = targetHeight;
 
+            Success.SetActive(true);
+            Invoke("SuccesUpload", 2f);
+
         }
         else
         {
             Debug.LogError($"❌ 上傳失敗: {request.error}");
+            Fail.SetActive(true);
+            Invoke("FailUpload", 2f);
         }
+    }
+
+    void SuccesUpload()
+    {
+        Success.SetActive(false);
+    }
+    void FailUpload()
+    {
+        Fail.SetActive(false);
     }
 
     IEnumerator DownloadCoroutine(string fileName, Action<Texture2D> onDownloaded)
@@ -230,7 +246,9 @@ public class SupabaseWebGLExample : MonoBehaviour
             Debug.LogError("❌ 取得失敗: " + request.error + "\n" + request.downloadHandler.text);
         }
     }
-
+    [SerializeField] int maxConcurrentDownloads = 1; // iPhone 建議 1，Android/iPad 可 2~4
+    private readonly Queue<(string url, string fileName)> _downloadQueue = new();
+    private int _activeDownloads = 0;
     IEnumerator ListAndShowIamges()
     {
         string url = $"{projectUrl}/storage/v1/object/list/{bucketName}";
@@ -264,9 +282,13 @@ public class SupabaseWebGLExample : MonoBehaviour
                     string fileName = file.name.ToString();
                     string publicUrl = $"{projectUrl}/storage/v1/object/public/{bucketName}/{fileName}";
 
-                     StartCoroutine(DownloadAndCreateItem(publicUrl,fileName));
+                    //StartCoroutine(DownloadAndCreateItem(publicUrl,fileName));
+                    _downloadQueue.Enqueue((publicUrl, fileName));
                 }
+                TryStartNextDownloads();
             }
+
+
             catch (System.Exception e)
             {
                 Debug.LogError("❌ JSON 解析失敗: " + e.Message);
@@ -276,6 +298,24 @@ public class SupabaseWebGLExample : MonoBehaviour
         {
             Debug.LogError("❌ 取得失敗: " + request.error + "\n" + request.downloadHandler.text);
         }
+    }
+
+    private void TryStartNextDownloads()
+    {
+        while (_activeDownloads < maxConcurrentDownloads && _downloadQueue.Count > 0)
+        {
+            var job = _downloadQueue.Dequeue();
+            _activeDownloads++;
+            StartCoroutine(DownloadAndCreateItem_Queued(job.url, job.fileName));
+        }
+    }
+
+    private IEnumerator DownloadAndCreateItem_Queued(string url, string fileName)
+    {
+        yield return StartCoroutine(DownloadAndCreateItem(url, fileName));
+
+        _activeDownloads--;
+        TryStartNextDownloads();
     }
 
     IEnumerator Deletecoroutinne(string fileName)
