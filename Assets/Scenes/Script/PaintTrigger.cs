@@ -14,13 +14,13 @@ public class PaintTrigger : MonoBehaviour, IPointerClickHandler
 
     public FirebaseWebRequest FirebaseWebRequest;
 
-    //public static Dictionary<string, GameObject> ActivePaints = new Dictionary<string, GameObject>();
+    public static Dictionary<string, GameObject> ActivePaints = new Dictionary<string, GameObject>();
 
      
     public void OnPointerClick(PointerEventData eventData)
     {
 
-        // PointTrigger.newPaint = this.gameObject;
+        PointTrigger.newPaint = this.gameObject;
         seletSetPaint = this.gameObject;
         DeleteButton.SetActive(true);
     }
